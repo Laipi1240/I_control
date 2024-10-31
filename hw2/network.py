@@ -1,8 +1,9 @@
 import numpy as np
 
 class SimpleNN:
-    def __init__(self, input_size, hidden_size, output_size, learning_rate=0.01):
+    def __init__(self, input_size, hidden_size, output_size, learning_rate=0.01, seed=35):
         # Initialize weights and biases
+        np.random.seed(seed)
         self.learning_rate = learning_rate
         self.W1 = np.random.randn(input_size, hidden_size) * 0.01  # Weights for input to hidden
         self.b1 = np.zeros((1, hidden_size))  # Bias for hidden layer
@@ -11,13 +12,9 @@ class SimpleNN:
 
     def relu(self, x):
         return np.maximum(0, x)
-        # x = np.clip(x, -500, 500)
-        # return 1/(1+np.exp(-x))
 
     def relu_derivative(self, x):
         return (x > 0).astype(float)
-        # x = np.clip(x, -500, 500)
-        # return x * (1-x)
 
     def forward(self, x):
         # Forward pass

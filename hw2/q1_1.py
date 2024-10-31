@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import SimpleNN
+from network import SimpleNN
 
 def target_function(x):
     return 1.0/x
@@ -9,7 +9,7 @@ def target_function(x):
 x_train = np.linspace(0.1, 1, 200).reshape(-1, 1)
 y_train = target_function(x_train)
 
-nn = SimpleNN(input_size=1, hidden_size=10, output_size=1, learning_rate=0.05)
+nn = SimpleNN(input_size=1, hidden_size=10, output_size=1, learning_rate=0.05, seed=35)
 
 epochs = 10000
 
