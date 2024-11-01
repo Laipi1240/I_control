@@ -7,7 +7,7 @@ def target_function(x):
     return np.sin(np.pi*x[:, 0])*np.cos(np.pi*x[:, 1])
 
 n_train_data = 200
-n_test_data = 2000
+n_test_data = 40
 
 # Define the 2D range
 x_min, x_max = -2, 2
@@ -47,18 +47,29 @@ x_test = np.vstack((t_grid_points, t_extra_points))
 y_train = target_function(x_train).reshape(-1, 1)
 y_train_for_plot = target_function(grid_points).reshape(xx.shape)
 
-nn = SimpleNN(input_size=2, hidden_size=50, output_size=1, learning_rate=0.05, seed=35)
+input_size = 2
+hidden_size = 20
+output_size = 1
 
-epochs = 10000
+nn = SimpleNN(
+    input_size=input_size, 
+    hidden_size=hidden_size, 
+    output_size=output_size, 
+    learning_rate=0.05, 
+    seed=35,
+    optimizer='adam')
 
+epochs = 100000
+vloss = []
 for epoch in range(epochs):
     output = nn.forward(x_train)
     loss = nn.backward(x_train, y_train, output)
-    
+    vloss.append(loss)
     if epoch % 100 == 0:
         print(f"Epoch {epoch}/{epochs}, Loss: {loss:.4f}")
 
 y_pred = nn.forward(x_test)
+y_test = target_function(x_test).reshape(-1, 1)
 
 # Create a 3D plot of the predicted values
 fig = plt.figure()
@@ -75,6 +86,19 @@ ax.scatter(x_test[:, 0], x_test[:, 1], z_pred, c='r', marker='o')
 ax.set_xlabel('X axis')
 ax.set_ylabel('Y axis')
 ax.set_zlabel('Predicted Z axis (f(x, y))')
-ax.set_title('3D Scatter Plot of Neural Network Predictions')
+ax.set_title('function 3 training result')
+ax.grid()
 
 plt.show()
+plt.plot(vloss)
+plt.xlabel("Epoch")
+plt.ylabel("Loss")
+plt.title("Loss Over Time")
+plt.grid()
+plt.show()
+
+print(f"Network Architecture: [{input_size} {hidden_size} {output_size}]")
+print(f"Activation function: [relu]")
+print(f"Epochs: {epochs}, Loss: {loss:.4f}")
+print(f"MSE: {np.mean((y_test-y_pred)**2):.4f}")
+print(f"MSE(%) : {100*np.mean((y_test-y_pred)**2)/np.mean(y_test**2):.4f}%")
