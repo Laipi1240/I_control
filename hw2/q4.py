@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 # Process parameters
 K = 1.0           # Gain
 tau = 10.0        # Time constant
-tau_DT = 2.0      # Dead time
+tau_DT = 1.0      # Dead time
 dt = 0.1          # Simulation time step
 time_end = 50     # End time for the simulation
 t = np.arange(0, time_end, dt)
